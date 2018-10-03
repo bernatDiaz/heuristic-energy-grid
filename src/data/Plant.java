@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Plant
 {
-    Plant(final IA.Energia.Central plant)
+    public Plant(final IA.Energia.Central plant)
     {
         coordX     = plant.getCoordX();
         coordY     = plant.getCoordY();
