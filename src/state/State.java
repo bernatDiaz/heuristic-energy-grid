@@ -1,9 +1,8 @@
 package state;
 
-import IA.Energia.Central;
-import IA.Energia.Cliente;
-
-import utils.Pair;
+import data.Client;
+import data.ContractType;
+import data.Plant;
 import utils.Nodo;
 import world.World;
 
@@ -24,58 +23,39 @@ public class State
 
     public void initializeNodes()
     {
-        int c = 0;
-        Nodo node;
-        Cliente cliente;
-        nodes = new ArrayList<>();
-        unassigned = new ArrayList<>();
-
         // Try to assign each guaranteed client with a plant
-        for (int p = 0; p < World.getPlants().size(); ++p)
+        for (final Plant plant: World.getPlants())
         {
-            node = new Nodo();
-            Central plant = World.getPlants().get(p);
-            node.setPlant(plant);
-
-            while (c < World.getNumClients() && node.hasAvailableEnergy() && node.posibleClient(World.getClient(c)))
+            for (final Client client: World.getClients())
             {
-                if (World.getClient(c).getTipo() == Cliente.GARANTIZADO)
+                if (!plant.canBeConnectedTo(client)) { break; }
+
+                if (client.getContract() == ContractType.GUARANTEED)
                 {
-                    node.addClient(World.getClient(c));
+                    client.connectTo(plant);
                 }
-                else
-                {
-                    unassigned.add(World.getClient(c));
-                }
-                ++c;
             }
-            nodes.add(node);
         }
 
-        // In case we've run out of plants but there are still clients to assign
-        for (int r = c; r < World.getNumClients(); ++r)
-        {
-            unassigned.add(World.getClient(r));
-        }
+        clientPlantList = World.save();
     }
 
     public int check()
     {
         int count = 0;
-        Cliente cliente;
+        Client cliente;
 
-        for(int i = 0; i < World.getNumClients(); ++i)
+        for(Client client: World.getClients())
         {
-            cliente = World.getClient(i);
-
             for(Nodo node: nodes)
             {
-                if(node.hasClient(cliente))
+                if(node.hasClient(client))
                 {
                     ++count;
                 }
             }
         }
+
         return count;
     }
 
@@ -99,9 +79,9 @@ public class State
     {
         int garantizados = 0;
         int noGarantizados = 0;
-        for(Cliente client : unassigned)
+        for(Client client : unassigned)
         {
-            if(client.getTipo() == Cliente.GARANTIZADO)
+            if(client.getContract() == ContractType.GUARANTEED)
             {
                 garantizados++;
             }
@@ -142,8 +122,8 @@ public class State
         return unassigned.size();
     }
 
-    private ArrayList<Cliente> unassigned;
+    private ArrayList<Client> unassigned;
     private ArrayList<Nodo> nodes;
 
-    private List<Integer> clientPlantIDs;
+    private List<Plant> clientPlantList;
 }

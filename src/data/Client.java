@@ -108,7 +108,7 @@ public final class Client
 
     public void connectTo(final Plant plant)
     {
-        if (plant != null) { throw new RuntimeException("Client is already connected to plant"); }
+        if (this.plant != null) { throw new RuntimeException("Client is already connected to plant"); }
 
         plant.connectTo(this);
         this.plant = plant;

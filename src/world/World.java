@@ -18,33 +18,30 @@ public class World
 
     }
 
-    public static void load(List<Integer> clientPlantIDs)
+    public static void load(List<Plant> clientPlantList)
     {
-        for (int clientID = 0; clientID < clientPlantIDs.size(); ++clientID)
+        for (int i = 0; i < clientPlantList.size(); ++i)
         {
-            int plantID = clientPlantIDs.get(clientID);
+            Plant plant = clientPlantList.get(i);
 
-            if (plantID >= 0)
+            if (plant != null)
             {
-                clients.get(clientID).connectTo(plants.get(plantID));
+                clients.get(i).connectTo(plant);
             }
         }
     }
 
-    public static List<Integer> save()
+    public static List<Plant> save()
     {
-        List<Integer> state = new ArrayList<>();
+        List<Plant> state = new ArrayList<>();
 
         for (final Client client: clients)
         {
+            state.add(client.getPlant());
+
             if (client.isSupplied())
             {
-                state.add(client.getPlant().getId());
                 client.disconnectFromPlant();
-            }
-            else
-            {
-                state.add(-1);
             }
         }
 
