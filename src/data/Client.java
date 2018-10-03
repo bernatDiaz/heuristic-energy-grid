@@ -6,8 +6,9 @@ import utils.Utils;
 public final class Client
 {
     // CONSTRUCTORS
-    public Client(final IA.Energia.Cliente client)
+    public Client(int id, final IA.Energia.Cliente client)
     {
+        this.id  = id;
         coordX   = client.getCoordX();
         coordY   = client.getCoordY();
         demand   = client.getConsumo();
@@ -16,6 +17,11 @@ public final class Client
     }
 
     // GETTERS
+    public int getId()
+    {
+        return id;
+    }
+
     public int getCoordX()
     {
         return coordX;
@@ -39,6 +45,11 @@ public final class Client
     public ClientType getType()
     {
         return type;
+    }
+
+    public Plant getPlant()
+    {
+        return plant;
     }
 
     public double distance(final Plant plant)
@@ -111,6 +122,7 @@ public final class Client
         plant = null;
     }
 
+    private final int    id;
     private final int    coordX;
     private final int    coordY;
     private final double demand;

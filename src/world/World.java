@@ -4,9 +4,11 @@ import IA.Energia.Central;
 import IA.Energia.Centrales;
 import IA.Energia.Cliente;
 import IA.Energia.Clientes;
-import utils.Utils;
+import data.Client;
+import data.Plant;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class World
@@ -16,36 +18,55 @@ public class World
 
     }
 
-    public static Central getPlant(int i)
+    public static void load(List<Integer> clientPlantIDs)
     {
-        return centrales.get(i);
+        for (int clientID = 0; clientID < clientPlantIDs.size(); ++clientID)
+        {
+            int plantID = clientPlantIDs.get(clientID);
+
+            if (plantID >= 0)
+            {
+                clients.get(clientID).connectTo(plants.get(plantID));
+            }
+        }
     }
 
-    public static Cliente getClient(int i)
+    public static List<Integer> save()
     {
-        return clients.get(i);
+        List<Integer> state = new ArrayList<>();
+
+        for (final Client client: clients)
+        {
+            if (client.isSupplied())
+            {
+                state.add(client.getPlant().getId());
+                client.disconnectFromPlant();
+            }
+            else
+            {
+                state.add(-1);
+            }
+        }
+
+        return state;
     }
 
-    public static int getNumPlants()
+    public static ArrayList<Client> getClients()
     {
-        return centrales.size();
+        return clients;
     }
 
-    public static int getNumClients()
+    public static ArrayList<Plant> getPlants()
     {
-        return clients.size();
-    }
-
-    public static double getMinDemand()
-    {
-        return minDemand;
+        return plants;
     }
 
     public static void randomInitialize() throws Exception
     {
-        centrales = generatePlants();
-
         boolean foundError;
+        ArrayList<Cliente> clients = new ArrayList<>();
+        ArrayList<Central> plants = generatePlants();
+
         do
         {
             try
@@ -60,7 +81,17 @@ public class World
         }
         while (foundError);
 
-        computeStats();
+        World.clients.clear();
+        for (int i = 0; i < clients.size(); ++i)
+        {
+            World.clients.add(new Client(i, clients.get(i)));
+        }
+
+        World.plants.clear();
+        for (int i = 0; i < plants.size(); ++i)
+        {
+            World.plants.add(new Plant(i, plants.get(i)));
+        }
     }
 
     private static ArrayList<Central> generatePlants() throws Exception
@@ -77,7 +108,7 @@ public class World
         propCentrales3 /= propCentralesTotal;
 
         int nCentrales [] = new int[3];
-        int nTotalCentrales = rand.nextInt(maxCentrales - minCentrales + 1) + minCentrales;
+        int nTotalCentrales = rand.nextInt(maxPlants - minPlants + 1) + minPlants;
 
         nCentrales[0] = Math.round(nTotalCentrales * propCentrales1);
         nCentrales[1] = Math.round(nTotalCentrales * propCentrales2);
@@ -101,33 +132,10 @@ public class World
         propClientes[1] /= propClientesTotal;
         propClientes[2] = 1.0 - propClientes[0] - propClientes[1];  // This assures they sum exactly 1
 
-        int nClientes = rand.nextInt(maxClientes - minClientes + 1) + minClientes;
+        int nClientes = rand.nextInt(maxClients - minClients + 1) + minClients;
         double propGarantizado = rand.nextDouble();
 
         return new Clientes(nClientes, propClientes, propGarantizado, rand.nextInt());
-    }
-
-    private static void computeStats()
-    {
-        computeMinDemand();
-    }
-
-    private static void computeMinDemand()
-    {
-        double demand;
-        minDemand = Double.MAX_VALUE;
-
-        for (Cliente cl: clients)
-        {
-            for (Central ce: centrales)
-            {
-                demand = Utils.demandByDistance(cl, ce);
-                if (demand < minDemand)
-                {
-                    minDemand = demand;
-                }
-            }
-        }
     }
 
     public static void printClients()
@@ -138,18 +146,15 @@ public class World
 
     public static void printPlants()
     {
-        System.out.println("Num centrales total en world");
-        System.out.println(centrales.size());
+        System.out.println("Num plants total en world");
+        System.out.println(plants.size());
     }
 
-    static private int minCentrales = 5;
-    static private int maxCentrales = 10;
-    static private int minClientes  = 500;
-    static private int maxClientes  = 600;
+    static private int minPlants  = 5;
+    static private int maxPlants  = 10;
+    static private int minClients = 500;
+    static private int maxClients = 600;
 
-    static private double minDemand;
-    //static private int maxDemand;
-
-    static private ArrayList<Central> centrales;
-    static private ArrayList<Cliente> clients;
+    static private ArrayList<Plant>  plants;
+    static private ArrayList<Client> clients;
 }

@@ -8,6 +8,7 @@ import utils.Nodo;
 import world.World;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class State
 {
@@ -30,10 +31,10 @@ public class State
         unassigned = new ArrayList<>();
 
         // Try to assign each guaranteed client with a plant
-        for (int p = 0; p < World.getNumPlants(); ++p)
+        for (int p = 0; p < World.getPlants().size(); ++p)
         {
             node = new Nodo();
-            Central plant = World.getPlant(p);
+            Central plant = World.getPlants().get(p);
             node.setPlant(plant);
 
             while (c < World.getNumClients() && node.hasAvailableEnergy() && node.posibleClient(World.getClient(c)))
@@ -143,4 +144,6 @@ public class State
 
     private ArrayList<Cliente> unassigned;
     private ArrayList<Nodo> nodes;
+
+    private List<Integer> clientPlantIDs;
 }

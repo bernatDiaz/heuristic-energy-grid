@@ -7,14 +7,20 @@ import java.util.Set;
 
 public class Plant
 {
-    public Plant(final IA.Energia.Central plant)
+    public Plant(final int id, final IA.Energia.Central plant)
     {
+        this.id    = id;
         coordX     = plant.getCoordX();
         coordY     = plant.getCoordY();
         production = plant.getProduccion();
         type       = PlantType.asEnum(plant.getTipo());
 
         availableEnergy = production;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 
     public int getCoordX()
@@ -35,6 +41,11 @@ public class Plant
     public PlantType getType()
     {
         return type;
+    }
+
+    public Set<Client> getClients()
+    {
+        return clients;
     }
 
     public double getBenefits() throws Exception
@@ -112,6 +123,7 @@ public class Plant
         availableEnergy += client.getRealDemand(this);
     }
 
+    private final int    id;
     private final int    coordX;
     private final int    coordY;
     private final double production;
