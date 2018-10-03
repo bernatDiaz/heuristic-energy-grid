@@ -45,18 +45,20 @@ public class World
     {
         centrales = generatePlants();
 
-        boolean foundError = false;
-        while (!foundError || clients.isEmpty())
+        boolean foundError;
+        do
         {
             try
             {
                 clients = generateClients();
+                foundError = false;
             }
             catch (Exception e)
             {
                 foundError = true;
             }
         }
+        while (foundError);
 
         computeStats();
     }
