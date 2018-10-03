@@ -1,6 +1,5 @@
 package data;
 
-import IA.Energia.Cliente;
 import IA.Energia.VEnergia;
 import utils.Utils;
 
@@ -47,9 +46,32 @@ public final class Client
         return Math.sqrt(Math.pow(plant.getCoordX() - coordX, 2) + Math.pow(plant.getCoordY() - coordY, 2));
     }
 
-    public double paidPrice() throws Exception
+    public double getPaidPrice() throws Exception
     {
-        return Utils.getUnitaryCost(contract, type);
+        double price;
+
+        if (isSupplied())
+        {
+            price = getConsumptionPrice();
+        }
+        else
+        {
+            price = -getIndemnizationCost();
+        }
+
+        return price;
+    }
+
+    public double getConsumptionPrice() throws Exception
+    {
+        return demand * Utils.getUnitaryCost(contract, type);
+    }
+
+    public double getIndemnizationCost() throws Exception
+    {
+        if (contract == ContractType.GUARANTEED) { throw new RuntimeException("A guaranteed contract type must always be served"); }
+
+        return demand * VEnergia.getTarifaClientePenalizacion(type.asInt());
     }
 
     // OTHER METHODS

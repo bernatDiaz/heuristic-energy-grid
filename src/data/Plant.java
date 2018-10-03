@@ -1,11 +1,13 @@
 package data;
 
+import IA.Energia.VEnergia;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Plant
 {
-    Plant(IA.Energia.Central plant)
+    Plant(final IA.Energia.Central plant)
     {
         coordX     = plant.getCoordX();
         coordY     = plant.getCoordY();
@@ -33,6 +35,44 @@ public class Plant
     public PlantType getType()
     {
         return type;
+    }
+
+    public double getBenefits() throws Exception
+    {
+        double benefit = -getPlantCost();
+
+        for (final Client client: clients)
+        {
+            benefit += client.getPaidPrice();
+        }
+
+        return benefit;
+    }
+
+    public double getPlantCost() throws Exception
+    {
+        double cost;
+
+        if (isOn())
+        {
+            cost = getRunningCost();
+        }
+        else
+        {
+            cost = getStoppedCost();
+        }
+
+        return cost;
+    }
+
+    public double getRunningCost() throws Exception
+    {
+        return production * VEnergia.getCosteProduccionMW(type.asInt()) + VEnergia.getCosteMarcha(type.asInt());
+    }
+
+    public double getStoppedCost() throws Exception
+    {
+        return VEnergia.getCosteParada(type.asInt());
     }
 
     public double distance(final Client client)
