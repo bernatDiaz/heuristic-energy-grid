@@ -46,7 +46,7 @@ public class World
         centrales = generatePlants();
 
         boolean foundError = false;
-        while (!foundError)
+        while (!foundError || clients.isEmpty())
         {
             try
             {

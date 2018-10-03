@@ -2,6 +2,7 @@ package utils;
 
 import IA.Energia.Central;
 import IA.Energia.Cliente;
+import IA.Energia.VEnergia;
 
 public class Utils
 {
@@ -25,11 +26,7 @@ public class Utils
     {
         double dist = distance(cliente, central);
 
-             if(dist < 10.0) { return 1.0; }
-        else if(dist < 25.0) { return 1.1; }
-        else if(dist < 50.0) { return 1.2; }
-        else if(dist < 75.0) { return 1.4; }
-        else                 { return 1.6; }
+        return VEnergia.getPerdida(dist);
     }
 
     public static double distanceFactor(Central central, Cliente cliente)

@@ -36,7 +36,7 @@ public class State
             Central plant = World.getPlant(p);
             node.setPlant(plant);
 
-            while (c < World.getNumClients() && node.posibleClient(World.getClient(c)))
+            while (c < World.getNumClients() && node.hasAvailableEnergy() && node.posibleClient(World.getClient(c)))
             {
                 if (World.getClient(c).getTipo() == Cliente.GARANTIZADO)
                 {
@@ -143,5 +143,4 @@ public class State
 
     private ArrayList<Cliente> unassigned;
     private ArrayList<Nodo> nodes;
-    private ArrayList<Pair<Central, Cliente>> conections;
 }
