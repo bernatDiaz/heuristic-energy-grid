@@ -11,10 +11,10 @@ import java.util.Random;
 public class World
 {
 
-    static private int minCentrales = 10;
-    static private int maxCentrales = 20;
-    static private int minClientes = 50;
-    static private int maxClientes = 100;
+    static private int minCentrales = 5;
+    static private int maxCentrales = 10;
+    static private int minClientes = 500;
+    static private int maxClientes = 600;
 
     private World()
     {
@@ -33,6 +33,14 @@ public class World
             }
         }
     }
+
+    public static int getNumPlants(){return plants.size();}
+
+    public static int getNumClients(){return clients.size();}
+
+    public static Central getPlant(int i){return plants.get(i);}
+
+    public static Cliente getClient(int i){return clients.get(i);}
 
     private static ArrayList<Central> generatePlants() throws Exception
     {
@@ -71,10 +79,19 @@ public class World
 
         int nClientes = rand.nextInt(maxClientes - minClientes + 1) + minClientes;
         double propGarantizado = rand.nextDouble();
-
         return new Clientes(nClientes, propClientes, propGarantizado, rand.nextInt());
     }
 
-    static public ArrayList<Central> plants;
-    static public ArrayList<Cliente> clients;
+    public static void printClients(){
+        System.out.println("Num clientes total en world");
+        System.out.println(clients.size());
+    }
+
+    public static void printPlants(){
+        System.out.println("Num centrales total en world");
+        System.out.println(plants.size());
+    }
+
+    static private ArrayList<Central> plants;
+    static private ArrayList<Cliente> clients;
 }

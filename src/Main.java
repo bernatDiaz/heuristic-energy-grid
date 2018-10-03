@@ -6,7 +6,11 @@ public class Main
     public static void main(String[] args) throws Exception
     {
         World.randomInitialize();
-        System.out.println(World.clients.size());
-        System.out.println(World.plants.size());
+        State state = new State();
+        state.initializeNodes();
+        state.checkOnlyGuaranted();
+        state.checkAllGuaranted();
+        World.printClients();
+        World.printPlants();
     }
 }
