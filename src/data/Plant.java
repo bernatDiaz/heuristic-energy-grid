@@ -7,14 +7,20 @@ import java.util.Set;
 
 public class Plant
 {
-    public Plant(final IA.Energia.Central plant)
+    public Plant(short id, final IA.Energia.Central plant)
     {
+        this.id    = id;
         coordX     = (byte)plant.getCoordX();
         coordY     = (byte)plant.getCoordY();
         production = (float)plant.getProduccion();
         type       = PlantType.asEnum(plant.getTipo());
 
         availableEnergy = production;
+    }
+
+    public short getID()
+    {
+        return id;
     }
 
     public byte getCoordX()
@@ -117,6 +123,7 @@ public class Plant
         availableEnergy += client.getRealDemand(this);
     }
 
+    private final short id;
     private final byte  coordX;
     private final byte  coordY;
     private final float production;

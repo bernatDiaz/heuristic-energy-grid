@@ -18,26 +18,23 @@ public class World
 
     }
 
-    public static void load(List<Plant> clientPlantList)
+    public static void load(List<Short> clientPlantIDList)
     {
-        for (int i = 0; i < clientPlantList.size(); ++i)
+        for (short i = 0; i < clientPlantIDList.size(); ++i)
         {
-            Plant plant = clientPlantList.get(i);
+            Plant plant = plants.get(clientPlantIDList.get(i));
 
-            if (plant != null)
-            {
-                clients.get(i).connectTo(plant);
-            }
+            clients.get(i).connectTo(plant);
         }
     }
 
-    public static List<Plant> save()
+    public static List<Short> save()
     {
-        List<Plant> state = new ArrayList<>();
+        List<Short> state = new ArrayList<>();
 
         for (final Client client: clients)
         {
-            state.add(client.getPlant());
+            state.add(client.getPlant().getID());
 
             if (client.isSupplied())
             {
@@ -79,13 +76,13 @@ public class World
         while (foundError);
 
         World.clients.clear();
-        for (int i = 0; i < clients.size(); ++i)
+        for (short i = 0; i < clients.size(); ++i)
         {
             World.clients.add(new Client(i, clients.get(i)));
         }
 
         World.plants.clear();
-        for (int i = 0; i < plants.size(); ++i)
+        for (short i = 0; i < plants.size(); ++i)
         {
             World.plants.add(new Plant(i, plants.get(i)));
         }
