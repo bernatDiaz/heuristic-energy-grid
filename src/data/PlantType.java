@@ -10,10 +10,10 @@ public enum PlantType
 
     private PlantType(int type)
     {
-        this.type = type;
+        this.type = (byte)type;
     }
 
-    public int asInt()
+    public byte asInt()
     {
         return type;
     }
@@ -40,5 +40,5 @@ public enum PlantType
         return type;
     }
 
-    private int type;
+    private byte type;
 }

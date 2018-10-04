@@ -7,33 +7,27 @@ import java.util.Set;
 
 public class Plant
 {
-    public Plant(final int id, final IA.Energia.Central plant)
+    public Plant(final IA.Energia.Central plant)
     {
-        this.id    = id;
-        coordX     = plant.getCoordX();
-        coordY     = plant.getCoordY();
-        production = plant.getProduccion();
+        coordX     = (byte)plant.getCoordX();
+        coordY     = (byte)plant.getCoordY();
+        production = (float)plant.getProduccion();
         type       = PlantType.asEnum(plant.getTipo());
 
         availableEnergy = production;
     }
 
-    public int getId()
-    {
-        return id;
-    }
-
-    public int getCoordX()
+    public byte getCoordX()
     {
         return coordX;
     }
 
-    public int getCoordY()
+    public byte getCoordY()
     {
         return coordY;
     }
 
-    public double getProduction()
+    public float getProduction()
     {
         return production;
     }
@@ -48,9 +42,9 @@ public class Plant
         return clients;
     }
 
-    public double getBenefits() throws Exception
+    public float getBenefits() throws Exception
     {
-        double benefit = -getPlantCost();
+        float benefit = -getPlantCost();
 
         for (final Client client: clients)
         {
@@ -60,9 +54,9 @@ public class Plant
         return benefit;
     }
 
-    public double getPlantCost() throws Exception
+    public float getPlantCost() throws Exception
     {
-        double cost;
+        float cost;
 
         if (isOn())
         {
@@ -76,19 +70,19 @@ public class Plant
         return cost;
     }
 
-    public double getRunningCost() throws Exception
+    public float getRunningCost() throws Exception
     {
-        return production * VEnergia.getCosteProduccionMW(type.asInt()) + VEnergia.getCosteMarcha(type.asInt());
+        return production * (float)VEnergia.getCosteProduccionMW(type.asInt()) + (float)VEnergia.getCosteMarcha(type.asInt());
     }
 
-    public double getStoppedCost() throws Exception
+    public float getStoppedCost() throws Exception
     {
-        return VEnergia.getCosteParada(type.asInt());
+        return (float)VEnergia.getCosteParada(type.asInt());
     }
 
-    public double distance(final Client client)
+    public float distance(final Client client)
     {
-        return Math.sqrt(Math.pow(client.getCoordX() - coordX, 2) + Math.pow(client.getCoordY() - coordY, 2));
+        return (float)Math.sqrt(Math.pow(client.getCoordX() - coordX, 2) + Math.pow(client.getCoordY() - coordY, 2));
     }
 
     // OTHER METHODS
@@ -123,12 +117,11 @@ public class Plant
         availableEnergy += client.getRealDemand(this);
     }
 
-    private final int    id;
-    private final int    coordX;
-    private final int    coordY;
-    private final double production;
+    private final byte  coordX;
+    private final byte  coordY;
+    private final float production;
     private final PlantType type;
 
-    private double availableEnergy;
+    private float availableEnergy;
     private Set<Client> clients = new HashSet<>();
 }

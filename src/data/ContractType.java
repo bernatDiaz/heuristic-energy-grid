@@ -9,10 +9,10 @@ public enum ContractType
 
     private ContractType(int type)
     {
-        this.type = type;
+        this.type = (byte)type;
     }
 
-    public int asInt()
+    public byte asInt()
     {
         return type;
     }
@@ -36,5 +36,5 @@ public enum ContractType
         return type;
     }
 
-    private int type;
+    private byte type;
 }

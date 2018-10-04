@@ -49,17 +49,17 @@ public class Utils
 
 
 
-    public static double getUnitaryCost(final ContractType contract, final ClientType type) throws Exception
+    public static float getUnitaryCost(final ContractType contract, final ClientType type) throws Exception
     {
-        double cost;
+        float cost;
 
         switch (contract)
         {
             case GUARANTEED:
-                cost = VEnergia.getTarifaClienteGarantizada(type.asInt());
+                cost = (float)VEnergia.getTarifaClienteGarantizada(type.asInt());
                 break;
             case NOT_GUARANTEED:
-                cost = VEnergia.getTarifaClienteNoGarantizada(type.asInt());
+                cost = (float)VEnergia.getTarifaClienteNoGarantizada(type.asInt());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid value for contract");

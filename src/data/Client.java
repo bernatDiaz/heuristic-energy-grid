@@ -6,33 +6,27 @@ import utils.Utils;
 public final class Client
 {
     // CONSTRUCTORS
-    public Client(int id, final IA.Energia.Cliente client)
+    public Client(final IA.Energia.Cliente client)
     {
-        this.id  = id;
-        coordX   = client.getCoordX();
-        coordY   = client.getCoordY();
-        demand   = client.getConsumo();
+        coordX   = (byte)client.getCoordX();
+        coordY   = (byte)client.getCoordY();
+        demand   = (byte)client.getConsumo();
         contract = ContractType.asEnum(client.getContrato());
         type     = ClientType.asEnum(client.getTipo());
     }
 
     // GETTERS
-    public int getId()
-    {
-        return id;
-    }
-
-    public int getCoordX()
+    public byte getCoordX()
     {
         return coordX;
     }
 
-    public int getCoordY()
+    public byte getCoordY()
     {
         return coordY;
     }
 
-    public double getDemand()
+    public float getDemand()
     {
         return demand;
     }
@@ -52,14 +46,14 @@ public final class Client
         return plant;
     }
 
-    public double distance(final Plant plant)
+    public float distance(final Plant plant)
     {
-        return Math.sqrt(Math.pow(plant.getCoordX() - coordX, 2) + Math.pow(plant.getCoordY() - coordY, 2));
+        return (float)Math.sqrt(Math.pow(plant.getCoordX() - coordX, 2) + Math.pow(plant.getCoordY() - coordY, 2));
     }
 
-    public double getPaidPrice() throws Exception
+    public float getPaidPrice() throws Exception
     {
-        double price;
+        float price;
 
         if (isSupplied())
         {
@@ -73,16 +67,16 @@ public final class Client
         return price;
     }
 
-    public double getConsumptionPrice() throws Exception
+    public float getConsumptionPrice() throws Exception
     {
         return demand * Utils.getUnitaryCost(contract, type);
     }
 
-    public double getIndemnizationCost() throws Exception
+    public float getIndemnizationCost() throws Exception
     {
         if (contract == ContractType.GUARANTEED) { throw new RuntimeException("A guaranteed contract type must always be served"); }
 
-        return demand * VEnergia.getTarifaClientePenalizacion(type.asInt());
+        return demand * (float)VEnergia.getTarifaClientePenalizacion(type.asInt());
     }
 
     // OTHER METHODS
@@ -96,9 +90,9 @@ public final class Client
         return plant != null;
     }
 
-    public double getRealDemand(final Plant plant)
+    public float getRealDemand(final Plant plant)
     {
-        return demand * (VEnergia.getPerdida(distance(plant)) + 1);
+        return demand * ((float)VEnergia.getPerdida(distance(plant)) + 1);
     }
 
     public boolean canBeConnectedTo(final Plant plant)
@@ -122,10 +116,9 @@ public final class Client
         plant = null;
     }
 
-    private final int    id;
-    private final int    coordX;
-    private final int    coordY;
-    private final double demand;
+    private final byte  coordX;
+    private final byte  coordY;
+    private final float demand;
     private final ContractType contract;
     private final ClientType   type;
 
