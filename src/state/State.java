@@ -3,10 +3,8 @@ package state;
 import data.Client;
 import data.ContractType;
 import data.Plant;
-import utils.Nodo;
 import world.World;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class State
@@ -37,7 +35,7 @@ public class State
             }
         }
 
-        clientPlantList = World.save();
+        clientPlantIDList = World.save();
     }
 
     public int check()
@@ -47,13 +45,6 @@ public class State
 
         for(Client client: World.getClients())
         {
-            for(Nodo node: nodes)
-            {
-                if(node.hasClient(client))
-                {
-                    ++count;
-                }
-            }
         }
 
         return count;
@@ -63,11 +54,6 @@ public class State
     {
         int garantizados = 0;
         int total = 0;
-        for(Nodo node: nodes)
-        {
-            garantizados += node.checkGuaranted();
-            total += node.numberClients();
-        }
 
         System.out.println("Num clientes total en nodes");
         System.out.println(total);
@@ -79,17 +65,6 @@ public class State
     {
         int garantizados = 0;
         int noGarantizados = 0;
-        for(Client client : unassigned)
-        {
-            if(client.getContract() == ContractType.GUARANTEED)
-            {
-                garantizados++;
-            }
-            else
-            {
-                noGarantizados++;
-            }
-        }
 
         System.out.println("Num clientes garantizado en unassigned");
         System.out.println(garantizados);
@@ -97,33 +72,24 @@ public class State
         System.out.println(noGarantizados);
     }
 
-    public int checkSize()
+    public short checkSize()
     {
         System.out.println(checkNodesSize());
         System.out.println(checkUnasignedSize());
 
-        return checkNodesSize() + checkUnasignedSize();
+        return (short)(checkNodesSize() + checkUnasignedSize());
     }
 
-    private int checkNodesSize()
+    private short checkNodesSize()
     {
-        int suma = 0;
-
-        for(Nodo node : nodes)
-        {
-            suma += node.numberClients();
-        }
-
-        return suma;
+        return 0;
     }
 
-    private int checkUnasignedSize()
+    private short checkUnasignedSize()
     {
-        return unassigned.size();
+        return 0;
     }
 
-    private ArrayList<Client> unassigned;
-    private ArrayList<Nodo> nodes;
-
-    private List<Plant> clientPlantList;
+    private List<Short> clientPlantIDList;
+    private List<Float> plantEvalFunctionVal;
 }

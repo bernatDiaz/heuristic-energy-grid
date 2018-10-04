@@ -6,8 +6,9 @@ import utils.Utils;
 public final class Client
 {
     // CONSTRUCTORS
-    public Client(final IA.Energia.Cliente client)
+    public Client(short id, final IA.Energia.Cliente client)
     {
+        this.id  = id;
         coordX   = (byte)client.getCoordX();
         coordY   = (byte)client.getCoordY();
         demand   = (byte)client.getConsumo();
@@ -16,6 +17,11 @@ public final class Client
     }
 
     // GETTERS
+    public short getID()
+    {
+        return id;
+    }
+
     public byte getCoordX()
     {
         return coordX;
@@ -116,6 +122,7 @@ public final class Client
         plant = null;
     }
 
+    private final short id;
     private final byte  coordX;
     private final byte  coordY;
     private final float demand;
