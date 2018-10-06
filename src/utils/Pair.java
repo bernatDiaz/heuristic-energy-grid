@@ -8,6 +8,12 @@ public class Pair<First, Second>
         this.second = second;
     }
 
+    public Pair<First, Second> makePair(First first, Second second){
+        this.first = first;
+        this.second = second;
+        return this;
+    }
+
     public final First first()
     {
         return first;

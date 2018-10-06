@@ -6,6 +6,7 @@ import IA.Energia.Cliente;
 import IA.Energia.Clientes;
 import data.Client;
 import data.Plant;
+import utils.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,21 +29,25 @@ public class World
         }
     }
 
-    public static List<Short> save()
+    public static Pair<short[], float[]> save()
     {
-        List<Short> state = new ArrayList<>();
-
-        for (final Client client: clients)
+        short [] stateClients = new short[clients.size()];
+        for (int c = 0; c < clients.size(); c++)
         {
-            state.add(client.getPlant().getID());
-
+            Client client = clients.get(c);
+            stateClients[c] = client.getPlantId();
             if (client.isSupplied())
             {
                 client.disconnectFromPlant();
             }
         }
 
-        return state;
+        float [] statePlants = new float[plants.size()];
+        for(int p = 0; p < plants.size(); p++){
+            Plant plant = plants.get(p);
+            statePlants[p] = plant.getAvailableEnergy();
+        }
+        return new Pair<>(stateClients, statePlants);
     }
 
     public static ArrayList<Client> getClients()
@@ -75,13 +80,15 @@ public class World
         }
         while (foundError);
 
-        World.clients.clear();
+        if(World.clients!=null) World.clients.clear();
+        else World.clients = new ArrayList<>();
         for (short i = 0; i < clients.size(); ++i)
         {
             World.clients.add(new Client(i, clients.get(i)));
         }
 
-        World.plants.clear();
+        if(World.plants!=null) World.plants.clear();
+        else World.plants = new ArrayList<>();
         for (short i = 0; i < plants.size(); ++i)
         {
             World.plants.add(new Plant(i, plants.get(i)));

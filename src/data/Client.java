@@ -47,9 +47,11 @@ public final class Client
         return type;
     }
 
-    public Plant getPlant()
-    {
-        return plant;
+    public Plant getPlant() { return plant; }
+
+    public short getPlantId(){
+        if(plant == null) return -1;
+        return plant.getID();
     }
 
     public float distance(final Plant plant)

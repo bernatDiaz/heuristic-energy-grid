@@ -38,6 +38,8 @@ public class Plant
         return production;
     }
 
+    public float getAvailableEnergy() {return availableEnergy; }
+
     public PlantType getType()
     {
         return type;
@@ -121,6 +123,10 @@ public class Plant
         if (!removed) { throw new RuntimeException("Client is not connected to plant"); }
 
         availableEnergy += client.getRealDemand(this);
+    }
+
+    public boolean isClosed(float availableEnergy){
+        return availableEnergy == production;
     }
 
     private final short id;
