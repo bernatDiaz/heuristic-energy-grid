@@ -10,11 +10,11 @@ public class HeuristicFunctionEntropia implements HeuristicFunction {
         State state = (State)n;
         float value = 0.0f;
         Plant central;
-        for(int i = 0; i < state.getNCentrals(); ++i){
+        for(int i = 0; i < World.getPlants().size(); ++i){
             central = World.getPlants().get(i);
             float total = central.getProduction();
             float percent = state.getAvailableEnergy(i) / total;
-            value -= percent * Math.log(percent);
+            value += percent * Math.log(percent);
         }
         return value;
     }

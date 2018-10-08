@@ -126,7 +126,7 @@ public class Plant
     }
 
     public boolean isClosed(float availableEnergy){
-        return availableEnergy == production;
+        return production - availableEnergy < TOLERANCE;
     }
 
     private final short id;
@@ -137,4 +137,6 @@ public class Plant
 
     private float availableEnergy;
     private Set<Client> clients = new HashSet<>();
+
+    private float TOLERANCE = 0.9f;
 }

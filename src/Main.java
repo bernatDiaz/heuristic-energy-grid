@@ -1,11 +1,13 @@
 import IA.Marenostrum.LocalSearchGoalTest;
 import adapters.CentralGoalTest;
 import adapters.HeuristicFunctionEntropia;
-import adapters.SuccerssorFunctionSwap;
+import adapters.SuccessorFunctionSwapHC;
+import adapters.SuccessorFunctionSwapSA;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
 import state.State;
 import world.World;
 
@@ -15,14 +17,35 @@ import java.util.Properties;
 
 public class Main
 {
+    static int MAX_ITERATIONS_SA = 2000;
+    static int ITERATIONS_HEAT = 100;
+    static int K = 10;
+    static double LLAMBDA = 10.0;
+
     public static void main(String[] args) throws Exception
     {
         World.randomInitialize();
+        hillClimbing();
+        //simulatedAnnealing();
+    }
+
+    private static void hillClimbing() throws Exception{
         State state = new State();
         state.initializeNodesB();
-        Problem problem = new Problem(state, new SuccerssorFunctionSwap(),
+        Problem problem = new Problem(state, new SuccessorFunctionSwapHC(),
                 new CentralGoalTest(), new HeuristicFunctionEntropia());
         Search alg = new HillClimbingSearch();
+        SearchAgent agent = new SearchAgent(problem, alg);
+        printActions(agent.getActions());
+        printInstrumentation(agent.getInstrumentation());
+    }
+
+    private static void simulatedAnnealing() throws Exception{
+        State state = new State();
+        state.initializeNodesB();
+        Problem problem = new Problem(state, new SuccessorFunctionSwapSA(),
+                new CentralGoalTest(), new HeuristicFunctionEntropia());
+        Search alg = new SimulatedAnnealingSearch(MAX_ITERATIONS_SA, ITERATIONS_HEAT, K, LLAMBDA);
         SearchAgent agent = new SearchAgent(problem, alg);
         printActions(agent.getActions());
         printInstrumentation(agent.getInstrumentation());

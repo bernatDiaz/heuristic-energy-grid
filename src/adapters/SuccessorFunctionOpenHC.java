@@ -9,7 +9,7 @@ import world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuccessorFunctionOpen implements SuccessorFunction {
+public class SuccessorFunctionOpenHC implements SuccessorFunction {
     public List getSuccessors(Object aState) {
         ArrayList retVal = new ArrayList();
         State state = (State)aState;

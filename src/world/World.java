@@ -152,9 +152,9 @@ public class World
     }
 
     static private int minPlants  = 5;
-    static private int maxPlants  = 10;
-    static private int minClients = 500;
-    static private int maxClients = 600;
+    static private int maxPlants  = 7;
+    static private int minClients = 15;
+    static private int maxClients = 20;
 
     static private ArrayList<Plant>  plants;
     static private ArrayList<Client> clients;

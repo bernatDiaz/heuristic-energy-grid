@@ -24,7 +24,7 @@ public class State implements Cloneable
     public void initializeNodesB() {
         int c = 0;
         // Try to assign each guaranteed client with a plant
-        for (final Plant plant : World.getPlants()) {
+        for (Plant plant : World.getPlants()) {
             while (c < World.getClients().size() && plant.canBeConnectedTo(World.getClients().get(c))) {
                 if (World.getClients().get(c).getContract() == ContractType.GUARANTEED) {
                     World.getClients().get(c).connectTo(plant);
@@ -96,44 +96,47 @@ public class State implements Cloneable
         return state.second()[i];
     }
 
-    public boolean swapAvailible(int i, int j){
-        short central1 = state.first()[i];
-        short central2 = state.first()[j];
+    public boolean swapAvailible(int client1, int client2){
+        short central1 = state.first()[client1];
+        short central2 = state.first()[client2];
 
         if(central1 == -1 || central2 == -1) return false;
 
         float availableEnergy1 = state.second()[central1];
         float availableEnergy2 = state.second()[central2];
 
-        float demand1 = World.getClients().get(i).getDemand();
-        float demand2 = World.getClients().get(j).getDemand();
+        float demand1 = World.getClients().get(client1).getDemand();
+        float demand2 = World.getClients().get(client2).getDemand();
 
-        boolean posible1 = state.second()[central1] - demand1 + demand2 >= 0.0f;
-        boolean posible2 = state.second()[central2] - demand2 + demand1 >= 0.0f;
+        boolean posible1 = availableEnergy1 + demand1 - demand2 >= 0.0f;
+        boolean posible2 = availableEnergy2 + demand2 - demand1 >= 0.0f;
 
         return posible1 && posible2;
     }
 
-    public void swapClients(int i, int j){
-        short central1 = state.first()[i];
+    public void swapClients(int client1, int client2){
+        short central1 = state.first()[client1];
         float availableEnergy1 = state.second()[central1];
-        float demand1 = World.getClients().get(i).getDemand();
-        short central2 = state.first()[j];
+        float demand1 = World.getClients().get(client1).getDemand();
+
+        short central2 = state.first()[client2];
         float availableEnergy2 = state.second()[central2];
-        float demand2 = World.getClients().get(j).getDemand();
-        state.first()[central1] = central2;
-        state.first()[central2] = central1;
-        state.second()[central1] = state.second()[central1] - demand1 + demand2;
-        state.second()[central2] = state.second()[central2] - demand2 + demand1;
+        float demand2 = World.getClients().get(client2).getDemand();
+
+        state.first()[client1] = central2;
+        state.first()[client2] = central1;
+        state.second()[central1] = availableEnergy1 + demand1 - demand2;
+        state.second()[central2] = availableEnergy2 + demand2 - demand1;
     }
 
     public void changeClient(int client, int central){
         float demand = World.getClients().get(client).getDemand();
-        state.second()[central] = state.second()[central] - demand;
+        state.second()[central] = state.second()[central] + demand;
         short origin = state.first()[client];
         if(origin != -1){
-            state.second()[origin] = state.second()[origin] + demand;
+            state.second()[origin] = state.second()[origin] - demand;
         }
+        state.first()[client] = (short)central;
     }
 
     public State clone(){
