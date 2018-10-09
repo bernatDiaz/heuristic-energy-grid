@@ -36,10 +36,6 @@ public class World
         {
             Client client = clients.get(c);
             stateClients[c] = client.getPlantId();
-            if (client.isSupplied())
-            {
-                client.disconnectFromPlant();
-            }
         }
 
         float [] statePlants = new float[plants.size()];
@@ -141,20 +137,29 @@ public class World
 
     public static void printClients()
     {
-        System.out.println("Num clientes total en world");
-        System.out.println(clients.size());
+        for(Client client : clients)
+            System.out.println(client.getDemand());
     }
 
     public static void printPlants()
     {
-        System.out.println("Num plants total en world");
-        System.out.println(plants.size());
+        for(Plant plant : plants) {
+            System.out.println(plant.getProduction());
+            System.out.println(plant.getAvailableEnergy());
+            System.out.println();
+        }
+    }
+
+    public static void printAll(){
+        printPlants();
+        System.out.println();
+        printClients();
     }
 
     static private int minPlants  = 5;
     static private int maxPlants  = 7;
-    static private int minClients = 15;
-    static private int maxClients = 20;
+    static private int minClients = 400;
+    static private int maxClients = 500;
 
     static private ArrayList<Plant>  plants;
     static private ArrayList<Client> clients;

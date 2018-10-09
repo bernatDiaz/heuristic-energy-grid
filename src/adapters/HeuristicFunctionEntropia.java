@@ -14,7 +14,7 @@ public class HeuristicFunctionEntropia implements HeuristicFunction {
             central = World.getPlants().get(i);
             float total = central.getProduction();
             float percent = state.getAvailableEnergy(i) / total;
-            value += percent * Math.log(percent);
+            value -= percent * Math.log(percent);
         }
         return value;
     }

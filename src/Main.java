@@ -1,16 +1,15 @@
 import IA.Marenostrum.LocalSearchGoalTest;
-import adapters.CentralGoalTest;
-import adapters.HeuristicFunctionEntropia;
-import adapters.SuccessorFunctionSwapHC;
-import adapters.SuccessorFunctionSwapSA;
+import adapters.*;
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.framework.SearchAgent;
+import aima.search.framework.Successor;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
 import state.State;
 import world.World;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -24,12 +23,11 @@ public class Main
 
     public static void main(String[] args) throws Exception
     {
-        World.randomInitialize();
         hillClimbing();
-        //simulatedAnnealing();
     }
 
     private static void hillClimbing() throws Exception{
+        World.randomInitialize();
         State state = new State();
         state.initializeNodesB();
         Problem problem = new Problem(state, new SuccessorFunctionSwapHC(),
@@ -41,6 +39,7 @@ public class Main
     }
 
     private static void simulatedAnnealing() throws Exception{
+        World.randomInitialize();
         State state = new State();
         state.initializeNodesB();
         Problem problem = new Problem(state, new SuccessorFunctionSwapSA(),
@@ -66,5 +65,30 @@ public class Main
             String action = (String) actions.get(i);
             System.out.println(action);
         }
+    }
+
+    private static void TestSwap() throws Exception{
+        int client1 = 1;
+        int client2 = 400;
+        World.randomInitialize();
+        State state = new State();
+        state.initializeNodesB();
+        state.printPlants();
+        state.printClient(client1);
+        state.printClient(client2);
+        state.swapClients(client1, client2);
+        state.printPlants();
+    }
+
+    private static void TestOpen() throws Exception{
+        int central = 4;
+        int client = 0;
+        World.randomInitialize();
+        State state = new State();
+        state.initializeNodesB();
+        state.printPlants();
+        state.printClient(client);
+        state.changeClient(client, central);
+        state.printPlants();
     }
 }
